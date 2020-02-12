@@ -24,12 +24,52 @@ class tournament():
         if self.game is not None:
             self.game.players = self.players
 
-    def play_n_games(self, n):
+    def play_all_player_combinations(self, games = 1, min = 2, max = None, inter_author=True, intra_author=True, self_play=True):
+        if max is None:
+            max = len(self.players)
+        player_combos = []
+        for n in range(min, max + 1):
+            player_combos += self.get_all_n_player_combinations(self.players, n)
+        player_lists = self.player_list_checker(player_combos, inter_author, intra_author, self_play)
+        for pl in player_lists:
+            self.play_n_games(n, players = pl)
+
+    def get_all_n_player_combinations(self, player_list, n):
+        if n > len(player_list):
+            return []
+        if n == 1:
+            return [[p] for p in player_list]
+        if n < 1:
+            return []
+        out = []
+        for i in range(len(player_list)):
+            for l in self.get_all_n_player_combinations(player_list[i:], n-1):
+                out += [[player_list[i]] + l]
+        return out
+
+    def player_list_checker(self, player_lists, inter_author=True, intra_author=False, self_play=False):
+        clean_player_lists = []
+        for pl in player_lists:
+            distinct_authors = sum([1 for author in set(map(lambda p: p.author, pl))])
+            if inter_author == False and distinct_authors > 1:
+               pass
+            elif intra_author == False and distinct_authors < len(pl):
+                pass
+            elif self_play == False and sum([1 for player in set(map(lambda p: id(p), pl))]) < len(pl):
+                pass
+            else:
+                clean_player_lists += pl
+        return clean_player_lists
+
+    def play_n_games(self, n, players=None):
         for i in range(n):
             self.play_game()
     
-    def play_game(self):
-        ranked_ids = self.game.play(self.players)
+    def play_game(self, players=None):
+        if players is None:
+            ranked_ids = self.game.play(self.players)
+        else:
+            ranked_ids = self.game.play(players)
         self.update_scores(ranked_ids)
 
     def update_scores(self, ranked_ids):
