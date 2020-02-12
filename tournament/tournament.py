@@ -44,7 +44,7 @@ class tournament():
         out = []
         for i in range(len(player_list)):
             for l in self.get_all_n_player_combinations(player_list[i:], n-1):
-                out += [[player_list[i]] + l]
+                out.append([player_list[i]] + l)
         return out
 
     def player_list_checker(self, player_lists, inter_author=True, intra_author=False, self_play=False):
@@ -58,13 +58,17 @@ class tournament():
             elif self_play == False and sum([1 for player in set(map(lambda p: id(p), pl))]) < len(pl):
                 pass
             else:
-                clean_player_lists += pl
+                clean_player_lists.append(pl)
         return clean_player_lists
 
     def play_n_games(self, n, players=None):
-        for i in range(n):
-            self.play_game()
-    
+        if players is None:
+            for i in range(n):
+                self.play_game()
+        else:
+            for i in range(n):
+                self.play_game(players)
+
     def play_game(self, players=None):
         if players is None:
             ranked_ids = self.game.play(self.players)
