@@ -5,7 +5,7 @@ from tournament import game as G
 
 class biggest_number(G.game):
 
-    def play(self, players):
+    def play(self, players, max_turn_number):
         outputs = map(lambda x: x.take_turn(), players)
         moves = list(map(lambda x, y:(x,y), players, outputs))
 

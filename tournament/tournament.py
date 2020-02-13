@@ -1,15 +1,15 @@
-from .player import player
-from .game import game
-from multi_elo import calc_elo
+from player import player
+from game import game
 
 class tournament():
 
     players = []
-    challenge = ''
+    max_turn_number = None
     game = game()
 
-    def __init__(self, challange_path=None, players_path=None):
-        self.challange = challange_path
+    def __init__(self, players_path=None, max_turn_number=None):
+        if max_turn_number is not None:
+            self.max_turn_number
         if players_path is not None:
             self.load_players(players_path)
 
@@ -71,7 +71,7 @@ class tournament():
 
     def play_game(self, players=None):
         if players is None:
-            ranked_ids = self.game.play(self.players)
+            ranked_ids = self.game.play(self.players, max_turn_number = self.max_turn_number, max_turn_time = self.max_turn_time)
         else:
             ranked_ids = self.game.play(players)
         self.update_scores(ranked_ids)
