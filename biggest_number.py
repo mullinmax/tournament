@@ -8,7 +8,10 @@ class biggest_number(G.game):
     def play(self, players):
         outputs = map(lambda x: x.take_turn(), players)
         moves = list(map(lambda x, y:(x,y), players, outputs))
-        moves.sort(reverse=True, key = lambda x: x[1])
+
+        # sort is stable so we sort by secondardy key and then primary key
+        moves.sort(reverse=False, key = lambda x: x[1][0]) # sort by time less is better
+        moves.sort(reverse=True, key = lambda x: x[1][1]) # sort by value returned more is better
         return list(map(lambda x: id(x[0]), moves))
 
     

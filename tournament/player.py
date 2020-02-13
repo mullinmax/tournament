@@ -1,4 +1,5 @@
 import os
+import time
 
 class player():
 
@@ -13,6 +14,7 @@ class player():
         self.author = author
 
     def take_turn(self, data = None):
+        start = time.time()
         self.clean_directory()
         if data is not None:
             f = open('./input.txt', 'w')
@@ -25,7 +27,8 @@ class player():
             f = open('./output.txt', 'r')
             lines = f.readlines()
         self.clean_directory()
-        return lines
+        end = time.time()
+        return (end - start, lines)
 
     def clean_directory(self):
         if os.path.exists('./output.txt'):

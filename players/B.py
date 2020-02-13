@@ -1,2 +1,4 @@
 #!/usr/bin/env python3
-print(2)
+import time
+time.sleep(.1)
+print(1)
