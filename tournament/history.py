@@ -4,8 +4,9 @@ class history():
     path = None
     records = []
 
-    def __intit__(self, path):
+    def __init__(self, path):
         if path is not None:
+            self.path = path
             if os.path.exists(path):
                 self.load_history(path)
         
@@ -27,7 +28,7 @@ class history():
         f.write(self.__str__())
 
     def add_record(self, data):
-        self.records.append(record(data))
+        self.records.append(record(data=data))
 
     def __str__(self):
         return '\n'.join([str(r) for r in self.records])
@@ -37,8 +38,12 @@ class record():
 
     data = {}
 
-    def __intit__(self, d=None):
-        self.data = d
+    def __init__(self, data=None):
+        if data is not None:
+            self.data = {}
+            for player in data:
+                self.data[player.path] = player.score
+
 
     # "player_path":score,"player_path":score,"player_path":score
     def parse_line(self, line):

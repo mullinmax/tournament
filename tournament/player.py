@@ -29,6 +29,7 @@ class player():
         if os.path.exists('./output.txt'):
             f = open('./output.txt', 'r')
         else:
+            self.clean_directory()
             return (end_time - start_time, '')
         lines = f.readlines()
         self.clean_directory()

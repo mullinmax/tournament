@@ -20,7 +20,7 @@ class tournament():
             self.load_players(players_path)
         if history_path is not None:
             self.history_path = history_path
-            self.load_history(history_path)
+            self.load_history()
 
     def load_players(self, path):
         f = open(path)
@@ -33,8 +33,8 @@ class tournament():
         if self.game is not None:
             self.game.players = self.players
 
-    def load_history(self, path):
-        self.history = history(path)
+    def load_history(self):
+        self.history = history(self.history_path)
 
     def save_history(self, path = None):
         self.history.save_history(path)
@@ -99,6 +99,7 @@ class tournament():
             new_scores += [(scores[i] + 2*scores[i+1] + scores[i+2]) / 4]
         for i in range(len(ranked_players)):
             ranked_players[i].score = new_scores[i]
+        self.history.add_record(data=ranked_players)
 
     def get_players_by_id(self, ids):
         players = []
