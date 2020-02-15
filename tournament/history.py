@@ -7,15 +7,13 @@ class history():
     def __init__(self, path):
         if path is not None:
             self.path = path
-            if os.path.exists(path):
-                self.load_history(path)
         
     def load_history(self, path):
         self.path = path
         f = open(path, 'r')
         self.records = []
         for line in f.read():
-            self.records += record(line) 
+            self.records += record().parse_line(line) 
 
     def save_history(self, path=None):
         if path is not None:
