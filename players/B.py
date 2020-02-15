@@ -1,4 +1,4 @@
 #!/usr/bin/env python3
 import time
-time.sleep(.1)
-print(1)
+time.sleep(2)
+print(10)

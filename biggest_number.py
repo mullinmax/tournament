@@ -5,8 +5,8 @@ from tournament import game as G
 
 class biggest_number(G.game):
 
-    def play(self, players, max_turn_number):
-        outputs = map(lambda x: x.take_turn(), players)
+    def play(self, players, max_turn_number, max_turn_time):
+        outputs = map(lambda x: x.take_turn(time_limit=max_turn_time), players)
         moves = list(map(lambda x, y:(x,y), players, outputs))
 
         # sort is stable so we sort by secondardy key and then primary key
@@ -16,7 +16,7 @@ class biggest_number(G.game):
 
     
 
-tor = T.tournament(players_path='./players/players.csv')
+tor = T.tournament(players_path='./players/players.csv', max_turn_time=1)
 print(tor)
 print()
 tor.game = biggest_number()

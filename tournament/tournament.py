@@ -1,17 +1,26 @@
-from player import player
-from game import game
+from tournament.player import player
+from tournament.game import game
+from tournament.history import history
 
 class tournament():
 
     players = []
     max_turn_number = None
+    max_turn_time = None
     game = game()
+    history = None
+    
 
-    def __init__(self, players_path=None, max_turn_number=None):
+    def __init__(self, players_path=None, max_turn_number=None, max_turn_time = None, history_path=None):
         if max_turn_number is not None:
-            self.max_turn_number
+            self.max_turn_number = max_turn_number
+        if max_turn_time is not None:
+            self.max_turn_time = max_turn_time
         if players_path is not None:
             self.load_players(players_path)
+        if history_path is not None:
+            self.history_path = history_path
+            self.load_history(history_path)
 
     def load_players(self, path):
         f = open(path)
@@ -23,6 +32,12 @@ class tournament():
 
         if self.game is not None:
             self.game.players = self.players
+
+    def load_history(self, path):
+        self.history = history(path)
+
+    def save_history(self, path = None):
+        self.history.save_history(path)
 
     def play_all_player_combinations(self, games = 1, min = 2, max = None, inter_author=True, intra_author=True, self_play=True):
         if max is None:
@@ -73,7 +88,7 @@ class tournament():
         if players is None:
             ranked_ids = self.game.play(self.players, max_turn_number = self.max_turn_number, max_turn_time = self.max_turn_time)
         else:
-            ranked_ids = self.game.play(players)
+            ranked_ids = self.game.play(players, max_turn_number = self.max_turn_number, max_turn_time = self.max_turn_time)
         self.update_scores(ranked_ids)
 
     def update_scores(self, ranked_ids):
@@ -96,7 +111,7 @@ class tournament():
         for p in self.players:
             if id(p) == id_num:
                 return p
-        # we need to raise in this case because we can no longer preserve order
+        # we need to raise in this case because we can no longer preserve order if we are scoring
         raise Exception('Player not found with specified id: ' + str(id_num))
     
     def set_game(self, game):
@@ -107,4 +122,6 @@ class tournament():
         lines = [str(p) for p in self.players]
         return '\n'.join(lines)
 
+    def create_html_page(self, path):
+        pass
 

@@ -13,22 +13,26 @@ class player():
         self.player_name = player_name
         self.author = author
 
-    def take_turn(self, data = None):
-        start = time.time()
+    def take_turn(self, data = None, time_limit=None):
         self.clean_directory()
+        script = ''
+        if time_limit is not None:
+            script += 'timeout {limit}s '.format(limit = time_limit)
         if data is not None:
             f = open('./input.txt', 'w')
             f.write(data)
-            os.system('cat ./input.txt | ' + self.path +' > ./output.txt')
+            script += 'cat ./input.txt | '
+        script += self.path +' > ./output.txt'
+        start_time = time.time()
+        os.system(script)
+        end_time = time.time()
+        if os.path.exists('./output.txt'):
             f = open('./output.txt', 'r')
-            lines = f.readlines()
         else:
-            os.system(self.path +' > ./output.txt')
-            f = open('./output.txt', 'r')
-            lines = f.readlines()
+            return (end_time - start_time, '')
+        lines = f.readlines()
         self.clean_directory()
-        end = time.time()
-        return (end - start, lines)
+        return (end_time - start_time, lines)
 
     def clean_directory(self):
         if os.path.exists('./output.txt'):
