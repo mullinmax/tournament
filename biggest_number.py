@@ -16,7 +16,7 @@ class biggest_number(G.game):
 
     
 
-tor = T.tournament(players_path='./players/players.csv', max_turn_time=1, history_path='history.txt')
+tor = T.tournament(players_path='./players/big_num/big_num_players.csv', max_turn_time=1, history_path='history.txt')
 tor.load_history()
 print(tor)
 print()
