@@ -20,6 +20,7 @@ class tournament():
             self.load_players(players_path)
         if history_path is not None:
             self.history_path = history_path
+            self.history = history(history_path)
 
     def load_players(self, path):
         f = open(path)

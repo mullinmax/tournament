@@ -4,7 +4,7 @@ class history():
     path = None
     records = []
 
-    def __init__(self, path):
+    def __init__(self, path = None):
         if path is not None:
             self.path = path
         

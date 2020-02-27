@@ -20,7 +20,7 @@ class player():
             script += 'timeout {limit}s '.format(limit = time_limit)
         if data is not None:
             f = open('./input.txt', 'w')
-            f.write(data)
+            f.write(str(data))
             script += 'cat ./input.txt | '
         script += self.path +' > ./output.txt'
         start_time = time.time()
@@ -36,10 +36,11 @@ class player():
         return (end_time - start_time, lines)
 
     def clean_directory(self):
-        if os.path.exists('./output.txt'):
-            os.remove('./output.txt')
-        if os.path.exists('./input.txt'):
-            os.remove('./input.txt')
+        pass
+        # if os.path.exists('./output.txt'):
+        #     os.remove('./output.txt')
+        # if os.path.exists('./input.txt'):
+        #     os.remove('./input.txt')
 
     def set_score(self, n):
         self.score = n
