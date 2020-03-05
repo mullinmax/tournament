@@ -1,6 +1,7 @@
 import sys
 import os
 import random
+import itertools
 
 from tournament import tournament as T
 from tournament import game as G
@@ -17,8 +18,14 @@ class connect4(G.game):
         self.clear_board()
 
     def clear_board(self):
-        self.board = [[0] * self.cols] * self.rows
-    
+        self.board = []
+        for r in range(self.rows):
+            row = []
+            for c in range(self.cols):
+                row.append(0)
+            self.board.append(row)
+        return
+
     def is_game_over(self):
         if self.who_won() is not None:
             print('Someone has won')
@@ -61,10 +68,19 @@ class connect4(G.game):
         
     def make_move(self, move, player):
         print(move)
-        for row in range(len(self.board), 0):
+        rows = list([i for i in range(len(self.board))])
+        rows.reverse()
+        print('rows: ' + str(rows))
+        for row in rows:
             if self.board[row][move] == 0:
+                print('making move: r' + str(row) + 'c' + str(move) )
+                print(self.board[row][move])
                 self.board[row][move] = id(player)
+                print(self.board[row][move])
+                print('board: ' + str(self.board))
                 return
+
+        print('move not completed')
         return
 
     def player_mask(self, player):
@@ -72,7 +88,8 @@ class connect4(G.game):
         for row in self.board:
             data_row = []
             for col in row:
-                if col == id(player):
+                print(col)
+                if col == int(id(player)):
                     data_row += ['S']
                 elif col == 0:
                     data_row += [' ']
@@ -86,21 +103,25 @@ class connect4(G.game):
         random.seed()
         random.shuffle(players)
         self.clear_board()
+        total_time = 0
         whos_turn = 0 
-        print('Game starts')
         while(self.is_game_over() == False):
-            print('it\'s ' + str(whos_turn) + ' turn')
             moves = self.valid_moves()
-            print(moves)
             if moves is None: # check for cats game
-                return [id(players[0]),id(players[1])] #sort by total runtime eventually 
+                if total_time > 0:
+                    return [id(players[0]),id(players[1])] 
+                else:
+                    return [id(players[1]),id(players[0])]
             player_data = self.player_mask(players[whos_turn])
-            print('player_data: ' + str(player_data))
+            move = None
             time, move = players[whos_turn].take_turn(data=player_data, time_limit=max_turn_time)
+            if whos_turn == 1:
+                total_time += time
+            else:
+                total_time -= time
             move = int(move[0])
-            print('move made: ' + str(move))
             if move in moves:
-                self.make_move(move, id(players[whos_turn]))
+                self.make_move(move, players[whos_turn])
             else:
                 # invalid move player 0 looses
                 if whos_turn == 0:
@@ -123,6 +144,7 @@ tor = T.tournament(players_path='./players/C4/connect4_players.csv', max_turn_ti
 tor.game = connect4()
 print(tor)
 print()
-tor.play_all_player_combinations(games=2, min=2, max=2)
+tor.play_game(tor.players[0:2])
+# tor.play_all_player_combinations(games=2, min=2, max=2)
 print(tor)
 tor.save_history()
